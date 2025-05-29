@@ -1,0 +1,128 @@
+# Route Curve Design Project — README
+
+## 💡 Purpose of the Project
+
+This project is a **graphical engineering tool** designed to support the teaching and practical application of *route surveying* techniques, specifically the geometric design and computation of **horizontal circular curves**. It targets university-level civil engineering students and instructors for educational use, as well as professional use in preliminary design.
+
+---
+
+## ✨ Overview of Features
+
+### 🔹 Educational Focus:
+
+* Modular structure for **Simple**, **Compound**, and **Reverse** curves
+* Helps students **visualize** geometry and **interpret** staking tables
+* Clear GUI workflow aligned with **lecture material**
+
+### 🔹 Software Capabilities:
+
+* Built using **Python + Tkinter** GUI
+* Real-time diagram plotting with **Matplotlib**
+* **Staking table generation** with computed deflections, chords, and stations
+* Exports results to **Excel** and **PDF reports**
+* Supports both **visual learning** and **formal reporting**
+
+---
+
+## 📆 Course Integration
+
+This application is designed to accompany topics covered in:
+
+* **Surveying I & II**
+* **Transportation Geometric Design**
+* **Highway Engineering**
+* **Civil CAD Lab Practice**
+
+Each module (Simple, Compound, Reverse) corresponds to an individual chapter in route surveying syllabi, helping bridge the gap between formulas and field layout.
+
+---
+
+## 🎨 Application Workflow
+
+1. **Start Page**: Welcome screen with project and course info
+2. **Curve Selection**: Choose curve type to study/design
+3. **Parameter Input**: Enter geometric and stationing data
+4. **Computation**: App calculates all relevant quantities
+5. **Graphical Visualization**: Curve and key points are drawn
+6. **Staking Table Generation**: For practical layout
+7. **Report Export**: Save results as Excel or PDF
+
+---
+
+## 📂 Curve Modules
+
+### ● Simple Curve
+
+* Radius (R)
+* Central angle (Δ)
+* PI station
+* Azimuth of back tangent
+
+### ● Compound Curve
+
+* Two radii (R1, R2)
+* Two angles (Δ1, Δ2)
+* Shared tangent point
+
+### ● Reverse Curve
+
+* Two curves in **opposite directions**
+* Common deflection angle
+* Useful for S-curve transitions
+
+---
+
+## 📄 Sample Educational Use
+
+Instructors can use this app:
+
+* During lectures to **demonstrate geometry** dynamically
+* In labs for students to **input field data**
+* For design assignments with **automated curve output**
+
+Students benefit by:
+
+* Seeing theory applied in a visual and interactive manner
+* Comparing manual calculations with app-generated results
+
+---
+
+## 🚀 Technical Requirements
+
+* Python 3.7+
+* Required libraries:
+
+  * `matplotlib`
+  * `tkinter`
+  * `pandas`
+  * `reportlab`
+  * `Pillow`
+
+---
+
+## 👤 Credits
+
+* **Instructor**: Dr. Yousef Kanani Sadat
+* **Developer**: Farzaneh Naderi
+* **Academic Year**: 2024–2025
+
+---
+
+## 🔍 Suggested Extensions
+
+* Add **3D visualization** of vertical alignment
+* Support for **spiral transitions**
+* Integration with **GIS or CAD export**
+* Add support for **field device outputs (e.g., Total Station)**
+
+---
+
+## 🎓 License & Use
+
+This project is open-source for academic and educational purposes. Commercial use or distribution requires permission.
+
+---
+
+## 🌟 Final Note
+
+> *This project makes classical civil engineering knowledge interactive, accessible, and professionally usable — ideal for modern classroom instruction and project design.*
