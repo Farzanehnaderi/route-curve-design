@@ -116,18 +116,15 @@ class ReverseCurve:
         max_arc_length = self.max_arc.get()
         azimuth_deg = self.azimuth.get()
 
-        # Calculate curve parameters
         T = R * math.tan(delta_rad / 2)
         L1 = R * delta_rad
         L2 = R * delta_rad
         L_total = L1 + L2
         P = 2 * R * (1 - math.cos(delta_rad))
 
-        # Calculate key stations
         E_chainage = T1_chainage + L1
         T2_chainage = E_chainage + L2
 
-        # Display results
         results = f"""Reverse Curve Results:
 Radius (R): {R:.2f} m
 Angle (Δ): {delta_deg:.2f}°
@@ -143,11 +140,9 @@ T2 Station: {T2_chainage:.2f} m
         self.results_text.delete(1.0, tk.END)
         self.results_text.insert(tk.END, results)
 
-        # Clear the treeview
         for i in self.tree.get_children():
             self.tree.delete(i)
 
-        # Calculate staking points for Curve 1 (Right curve)
         self.impl_data1 = []
         first_impl1 = math.ceil(T1_chainage / max_arc_length) * max_arc_length
         impl_chainages1 = [first_impl1] if first_impl1 < E_chainage else []
@@ -159,7 +154,6 @@ T2 Station: {T2_chainage:.2f} m
         prev_chainage = T1_chainage
         cumulative_deflection = 0
 
-        # Add T1 point
         self.tree.insert("", "end", values=(
             "T1",
             f"{T1_chainage:.2f}",
@@ -201,7 +195,6 @@ T2 Station: {T2_chainage:.2f} m
             ))
             prev_chainage = ch
 
-        # Calculate staking points for Curve 2 (Left curve)
         self.impl_data2 = []
         first_impl2 = math.ceil(E_chainage / max_arc_length) * max_arc_length
         impl_chainages2 = [first_impl2] if first_impl2 < T2_chainage else []
@@ -213,7 +206,6 @@ T2 Station: {T2_chainage:.2f} m
         prev_chainage = E_chainage
         cumulative_deflection = 0
 
-        # Add E point
         self.tree.insert("", "end", values=(
             "E",
             f"{E_chainage:.2f}",
@@ -255,7 +247,6 @@ T2 Station: {T2_chainage:.2f} m
             ))
             prev_chainage = ch
 
-        # Update class variables
         self.R_val = R
         self.delta_deg_val = delta_deg
         self.T = T
@@ -281,7 +272,6 @@ T2 Station: {T2_chainage:.2f} m
         delta_rad = self.delta_rad
         azimuth_rad = math.radians(self.azimuth_deg)
 
-        # Calculate key points
         T1_x, T1_y = 0, 0
         I1_x = self.T * math.sin(azimuth_rad)
         I1_y = self.T * math.cos(azimuth_rad)
@@ -293,7 +283,6 @@ T2 Station: {T2_chainage:.2f} m
         T2_x = I2_x + self.T * math.sin(azimuth_rad)
         T2_y = I2_y + self.T * math.cos(azimuth_rad)
 
-        # Calculate first curve (right turn)
         dir1 = azimuth_rad + math.pi / 2
         O1_x = T1_x + R * math.sin(dir1)
         O1_y = T1_y + R * math.cos(dir1)
@@ -305,7 +294,6 @@ T2 Station: {T2_chainage:.2f} m
         y1 = O1_y + R * np.cos(theta1)
         E_x, E_y = x1[-1], y1[-1]
 
-        # Calculate second curve (left turn)
         dir2 = azimuth_rad - math.pi / 2
         O2_x = T2_x + R * math.sin(dir2)
         O2_y = T2_y + R * math.cos(dir2)
@@ -316,14 +304,12 @@ T2 Station: {T2_chainage:.2f} m
         x2 = O2_x + R * np.sin(theta2)
         y2 = O2_y + R * np.cos(theta2)
 
-        # Draw lines
         self.ax.plot([T1_x, I1_x], [T1_y, I1_y], 'k--')
         self.ax.plot([I1_x, I2_x], [I1_y, I2_y], 'k--')
         self.ax.plot([T2_x, I2_x], [T2_y, I2_y], 'k--')
         self.ax.plot(x1, y1, 'b-', label='Curve 1')
         self.ax.plot(x2, y2, 'r-', label='Curve 2')
 
-        # Plot key points
         self.ax.plot(T1_x, T1_y, 'go', markersize=8)
         self.ax.annotate("T1", xy=(T1_x, T1_y), xytext=(T1_x - 5, T1_y + 5))
         self.ax.plot(I1_x, I1_y, 'yo', markersize=8)
@@ -335,11 +321,9 @@ T2 Station: {T2_chainage:.2f} m
         self.ax.plot(T2_x, T2_y, 'ro', markersize=8)
         self.ax.annotate("T2", xy=(T2_x, T2_y), xytext=(T2_x + 5, T2_y + 5))
 
-        # Plot staking points with labels and different colors
         for p in self.impl_data1 + self.impl_data2:
             arc_len = p['arc_length']
             if arc_len <= self.L1:
-                # Curve 1 points
                 delta_i = arc_len / R
                 theta_i = d1_start + delta_i
                 x_i = O1_x + R * math.sin(theta_i)
@@ -350,7 +334,6 @@ T2 Station: {T2_chainage:.2f} m
                 self.ax.annotate(point_name, xy=(x_i, y_i), xytext=(x_i + 1, y_i + 1), 
                            fontsize=8, color=color)
             else:
-                # Curve 2 points
                 arc_len2 = arc_len - self.L1
                 delta_i2 = arc_len2 / R
                 theta_i2 = d2_start - delta_i2
@@ -359,7 +342,6 @@ T2 Station: {T2_chainage:.2f} m
                 color = 'red'
                 point_name = "T2" if math.isclose(p['chainage'], self.T2_chainage, abs_tol=0.01) else f"P{p['id']}"
             
-            # Plot point with different style for each curve
                 self.ax.plot(x_i, y_i, 'o', color=color, markersize=6, markerfacecolor='none')
                 self.ax.annotate(point_name, xy=(x_i, y_i), xytext=(x_i + 1, y_i + 1), 
                            fontsize=8, color=color)
@@ -385,7 +367,6 @@ T2 Station: {T2_chainage:.2f} m
         if not file_path:
             return
 
-        # داده‌های پارامترها
         df_params = pd.DataFrame({
             'Parameter': [
                 'Radius (R)', 'Deflection Angle (Δ)', 'Tangent (T)',
@@ -405,11 +386,9 @@ T2 Station: {T2_chainage:.2f} m
             ]
         })
 
-        # داده‌های جدول استقرار
         staking_data = self.get_staking_table_data()
         df_staking = pd.DataFrame(staking_data)
 
-        # ذخیره در اکسل
         with pd.ExcelWriter(file_path) as writer:
             df_params.to_excel(writer, sheet_name="Parameters", index=False)
             df_staking.to_excel(writer, sheet_name="Staking Table", index=False)
@@ -432,9 +411,7 @@ T2 Station: {T2_chainage:.2f} m
         if not file_path:
             return
 
-        # Create PDF document
         with PdfPages(file_path) as pdf:
-            # Page 1: Parameters
             fig1 = plt.figure(figsize=(8, 6))
             ax1 = fig1.add_subplot(111)
             ax1.axis('off')
@@ -458,12 +435,10 @@ T2 Station: {T2_chainage:.2f} m
             pdf.savefig(fig1)
             plt.close(fig1)
 
-            # Page 2: Staking Table
             fig2 = plt.figure(figsize=(10, 8))
             ax2 = fig2.add_subplot(111)
             ax2.axis('off')
             
-            # Prepare table data
             table_data = [["Point", "Station", "Arc Length", "Δi (°)", "ΣΔ", "Chord", "Curve"]]
             staking_data = self.get_staking_table_data()
             
@@ -478,7 +453,6 @@ T2 Station: {T2_chainage:.2f} m
                     item['Curve']
                 ])
             
-            # Create table
             table = ax2.table(
                 cellText=table_data,
                 loc='center',
@@ -493,8 +467,7 @@ T2 Station: {T2_chainage:.2f} m
             pdf.savefig(fig2)
             plt.close(fig2)
 
-            # Page 3: Diagram
-            self.draw_curve()  # Ensure diagram is up to date
+            self.draw_curve()  
             pdf.savefig(self.canvas.figure)
 
         messagebox.showinfo("Success", "PDF exported successfully!")
